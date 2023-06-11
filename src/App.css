@@ -1,38 +1,259 @@
 .App {
   text-align: center;
+  margin: 0 auto 2em;
+  width: 94%;
+  max-width: 840px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.calendar-btn-area {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  height: 80px;
+  margin: 10px;
 }
 
-.App-link {
-  color: #61dafb;
+button {
+  appearance: none;
+  border: 1px solid #8b8b8b;
+  margin: 0 10px;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #000;
+  padding: 8px 16px;
+  font-size: 0.875em;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-@keyframes App-logo-spin {
-  from {
+button:hover {
+  color: #fff;
+  background: #7ca6ff;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px #cbd6ee;
+}
+
+.disable {
+  visibility: hidden;
+}
+
+.calendar-table-area {
+  width: 100%;
+  margin: auto;
+}
+
+.calendar-table-area table {
+  table-layout: fixed;
+  width: 100%;
+  font-size: 0.875em;
+  border-collapse: collapse;
+}
+
+.calendar-table-header {
+  padding-right: 15px;
+}
+
+.calendar-table-body {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  height: 50vh;
+}
+
+.calendar-table-body table {
+  border-top: 2px solid #717171;
+}
+
+.calendar-table-body table td {
+  border-left: 1px solid #717171;
+}
+
+/* 行ごとの設定 */
+.calendar-table-body table tr {
+  height: 32px;
+  border-left: 2px solid #717171;
+  border-right: 2px solid #717171;
+}
+
+/* 偶数行 */
+.calendar-table-body table tr:nth-child(even) {
+  border-bottom: 2px solid #717171;
+}
+
+.calendar-table-body tr:nth-child(even) th {
+  font-size: 0.875em;
+}
+
+/* 奇数行 */
+.calendar-table-body table tr:nth-child(odd) {
+  border-bottom: 1px dotted #717171;
+}
+
+/* ステータス別スタイル */
+td.slot-open {
+  color: #4966a7;
+  background-color: #fff;
+}
+
+td.slot-open:hover {
+  background-color: #feffce;
+  cursor: pointer;
+}
+
+td.slot-closed {
+  background-color: #e7e7e7e9;
+}
+
+/* 入力エリア */
+
+.input-area table {
+  width: 100%;
+  margin-bottom: 20px;
+  border-collapse: collapse;
+}
+
+.input-area tr th {
+  padding: 1em;
+  width: 30%;
+  font-weight: bold;
+  text-align: left;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.input-area tr td {
+  padding: 1em;
+  width: 70%;
+  text-align: left;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.required {
+  background-color: #f0ad4e;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  min-width: 10px;
+  padding: 3px 7px;
+  margin: 0px 5px;
+  line-height: 1;
+  vertical-align: middle;
+  white-space: nowrap;
+  text-align: center;
+  border-radius: 10px;
+  display: inline-block;
+}
+
+.input-error-msg {
+  color: red;
+  font-size: 0.875em;
+}
+
+.input-area input,
+.input-area select {
+  margin: 0.5em 0;
+  font-size: 16px;
+  padding: 0.5em 0.5em;
+  line-height: 1.5;
+  border: 1px solid #6a6a6a;
+  border-radius: 5px;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  resize: none;
+  width: 90%;
+}
+
+input.input-date {
+  width: 150px;
+  margin-left: 10%;
+}
+
+input.input-start-time,
+select.input-use-time {
+  width: 100px;
+  margin-left: 5%;
+}
+
+/* モーダル画面 */
+.confirm-modal-contents,
+.complete-modal-contents {
+  padding: 10px;
+  text-align: center;
+}
+
+.confirm-modal-contents table {
+  width: 100%;
+  margin-bottom: 20px;
+  border-collapse: collapse;
+}
+
+.confirm-modal-contents tr th {
+  padding: 1em;
+  width: 30%;
+  font-weight: bold;
+  text-align: left;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.confirm-modal-contents tr td {
+  padding: 1em;
+  width: 70%;
+  text-align: left;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.confirm-modal-apply-button {
+  margin-bottom: 10px;
+}
+
+div.complete-reservation-number {
+  width: 50%;
+  min-width: 200px;
+  margin: auto;
+  padding-top: 2px;
+  padding-bottom: 5px;
+  background-color: #ffdcb0;
+}
+
+.complete-reservation-number p {
+  color: rgb(139, 10, 10);
+  font-weight: bold;
+}
+
+/* ローディング画面 */
+.loading {
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #fdfdfd;
+}
+.loading.hide {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 500ms;
+}
+.loading .circle {
+  display: block;
+  position: relative;
+  top: calc(50% - 20px);
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+  border: 8px solid #e0e0e0;
+  border-top: 7px solid #717171;
+  border-radius: 50px;
+  animation: loading 700ms linear 0ms infinite normal both;
+}
+@keyframes loading {
+  0% {
     transform: rotate(0deg);
   }
-  to {
+  100% {
     transform: rotate(360deg);
   }
 }
