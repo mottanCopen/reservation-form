@@ -72,6 +72,8 @@ function App() {
   const [inputData, setInputData] = useState({});
   // 選択された日時
   const [selectedDateTime, setSeletedDateTime] = useState({});
+  // 選択された利用時間
+  const [selectedUseTime, setSeletedUseTime] = useState(0);
 
   // Modalの設定
   ReactModal.setAppElement("#root");
@@ -136,7 +138,7 @@ function App() {
       shouldValidate: true,
       shouldDirty: true,
     });
-    setSeletedDateTime({ date, time, timeIndex });
+    setSeletedDateTime({ date, time, dayIndex, timeIndex });
     const timeTable = [...viewCalendar[dayIndex].timeSlots];
     // 予約可能最大時間数を取得
     let availableCnt = timeIndex;
@@ -159,6 +161,18 @@ function App() {
     }
     setSelectableTime([...selectableTimeList]);
   };
+
+  const onChageUseTime = (event) => {
+    setSeletedUseTime(Number(event.target.value));
+  };
+
+  useEffect(() => {
+    setSeletedUseTime(0);
+    setValue("useTime", "0", {
+      shouldValidate: false,
+      shouldDirty: true,
+    });
+  }, [selectedDateTime.date]);
 
   // 表示リストがundefinedのときはローディング画面を表示
   if (viewCalendar[0] === undefined || viewCalendar[0] === null) {
@@ -201,6 +215,8 @@ function App() {
           timeTable={timeTable}
           week={week}
           onClickSlot={onClickSlot}
+          selectedDateTime={selectedDateTime}
+          selectedUseTime={selectedUseTime}
         />
       </div>
       <div className="input-area">
@@ -233,6 +249,7 @@ function App() {
                       readOnly
                       register={register}
                       selectableTime={selectableTime}
+                      onChange={onChageUseTime}
                     />
                     {errors.useTime && <ErrorMessage error={errors.useTime} />}
                   </div>

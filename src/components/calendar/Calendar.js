@@ -2,7 +2,14 @@ import React from "react";
 import { TimeRow } from "./TimeRow";
 
 export const Calendar = (props) => {
-  const { viewCalendar, timeTable, week, onClickSlot } = props;
+  const {
+    viewCalendar,
+    timeTable,
+    week,
+    onClickSlot,
+    selectedDateTime,
+    selectedUseTime,
+  } = props;
   return (
     <div className="calendar-table-area">
       <div className="calendar-table-header">
@@ -34,6 +41,8 @@ export const Calendar = (props) => {
                   time={time}
                   timeIndex={timeIndex}
                   onClickSlot={onClickSlot}
+                  selectedDateTime={selectedDateTime}
+                  selectedUseTime={selectedUseTime}
                 />
               );
             })}

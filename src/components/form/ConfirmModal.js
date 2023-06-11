@@ -25,7 +25,7 @@ export const ConfirmModal = (props) => {
   const createRequest = (inputData, selectedDateTime) => {
     const { useTime, name, Email, number } = inputData;
     const { date, timeIndex } = selectedDateTime;
-    const reqUseTime = Number(useTime) + 1; // 最短利用時間をセレクトから除外した場合はIndexが変わる
+    const reqUseTime = Number(useTime);
     return {
       date: date,
       timeIndex: timeIndex,
@@ -41,9 +41,8 @@ export const ConfirmModal = (props) => {
    */
 
   // 利用時間を数値に変換する
-  // 最短利用時間をセレクトから除外した場合はIndexが変わる
   const convertTime = (index) => {
-    const useTime = (Number(index) + 1) / 2;
+    const useTime = Number(index) / 2;
     // 表示用の値を生成
     const hour = Math.floor(useTime);
     const minute = (useTime - hour) * 60;

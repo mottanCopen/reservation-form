@@ -3,7 +3,14 @@ import React from "react";
 import { Slot } from "./Slot";
 
 export const TimeRow = (props) => {
-  const { viewCalendar, time, timeIndex, onClickSlot } = props;
+  const {
+    viewCalendar,
+    time,
+    timeIndex,
+    onClickSlot,
+    selectedDateTime,
+    selectedUseTime,
+  } = props;
   return (
     <tr>
       <th>{time}</th>
@@ -16,6 +23,8 @@ export const TimeRow = (props) => {
           time={time}
           timeIndex={timeIndex}
           onClickSlot={onClickSlot}
+          selectedDateTime={selectedDateTime}
+          selectedUseTime={selectedUseTime}
         />
       ))}
     </tr>
