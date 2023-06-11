@@ -240,6 +240,7 @@ function App() {
                     <label>開始時刻</label>
                     <input
                       id="startTime"
+                      readOnly
                       className="input-start-time"
                       {...register("startTime", {
                         required: {
