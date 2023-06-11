@@ -6,15 +6,15 @@ export const ConfirmModal = (props) => {
     setConfirmModalIsOpen,
     setCompleteModalIsOpen,
     inputData,
-    selectedTimeIndex,
+    selectedDateTime,
   } = props;
 
   const closeModal = () => {
     setConfirmModalIsOpen(false);
   };
 
-  const submit = (data) => {
-    console.log(createRequest(data));
+  const submit = (input, selectedData) => {
+    console.log(createRequest(input, selectedData));
     setConfirmModalIsOpen(false);
     setCompleteModalIsOpen(true);
   };
@@ -22,13 +22,13 @@ export const ConfirmModal = (props) => {
   /*
    ** ▼▼▼▼▼▼▼▼▼リクエストフォーマット生成▼▼▼▼▼▼▼▼▼
    */
-  const createRequest = (inputData) => {
-    const { date, useTime, name, Email, number } = inputData;
+  const createRequest = (inputData, selectedDateTime) => {
+    const { useTime, name, Email, number } = inputData;
+    const { date, timeIndex } = selectedDateTime;
     const reqUseTime = Number(useTime) + 1; // 最短利用時間をセレクトから除外した場合はIndexが変わる
-    const reqDate = new Date(date);
     return {
-      date: reqDate,
-      selectedTimeIndex,
+      date: date,
+      timeIndex: timeIndex,
       useTime: reqUseTime,
       name,
       Email,
@@ -102,15 +102,15 @@ export const ConfirmModal = (props) => {
           <tr>
             <th>ご利用日時</th>
             <td>
-              <div>{inputData.date}</div>
+              <div>{selectedDateTime.date.toLocaleDateString()}</div>
               <div>
                 <label>開始時刻：</label>
-                {inputData.startTime}
+                {selectedDateTime.time}
               </div>
               <div>
                 <label>終了時刻：</label>
                 {displayEndTime(
-                  convertStartTime(inputData.startTime),
+                  convertStartTime(selectedDateTime.time),
                   convertTime(inputData.useTime)
                 )}
               </div>
@@ -126,7 +126,7 @@ export const ConfirmModal = (props) => {
         <Button
           text="予約を確定する"
           className="cal-btn"
-          onClick={() => submit(inputData)}
+          onClick={() => submit(inputData, selectedDateTime)}
         />
       </div>
       <div className="confirm-modal-back-button">

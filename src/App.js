@@ -70,8 +70,9 @@ function App() {
   const [completeModalIsOpen, setCompleteModalIsOpen] = useState(false);
   // 入力内容
   const [inputData, setInputData] = useState({});
-  // 選択されたタイムインデックス
-  const [selectedTimeIndex, setTimeIndex] = useState();
+  // 選択された日時
+  const [selectedDateTime, setSeletedDateTime] = useState({});
+
   // Modalの設定
   ReactModal.setAppElement("#root");
 
@@ -115,28 +116,13 @@ function App() {
     console.log(viewCalendar);
   }, [calendar, pageIndex]);
 
-  // 週ボタンの表示非表示を保持
-  const [preWeekDisable, setPreWeekDisable] = useState(true);
-  const [nextWeekDisable, setNextWeekDisable] = useState(false);
-
   // 前週ボタン
   const onClickPreWeek = () => {
-    if (pageIndex - 1 === 0) {
-      // 最前週の場合は前週ボタンを非表示にする
-      setPreWeekDisable(true);
-    }
-    nextWeekDisable && setNextWeekDisable(!nextWeekDisable);
     setPageIndex(pageIndex - 1);
   };
 
   // 次週ボタン
   const onClickNextWeek = () => {
-    const nextIndex = calendar.length / displayCount;
-    if (pageIndex + 2 === Math.floor(nextIndex)) {
-      // 最後週の場合は次週ボタンを非表示にする
-      setNextWeekDisable(true);
-    }
-    preWeekDisable && setPreWeekDisable(!preWeekDisable);
     setPageIndex(pageIndex + 1);
   };
 
@@ -150,7 +136,7 @@ function App() {
       shouldValidate: true,
       shouldDirty: true,
     });
-    setTimeIndex(timeIndex);
+    setSeletedDateTime({ date, time, timeIndex });
     const timeTable = [...viewCalendar[dayIndex].timeSlots];
     // 予約可能最大時間数を取得
     let availableCnt = timeIndex;
@@ -189,7 +175,7 @@ function App() {
         <div className="calendar-btn-left">
           <Button
             text="前週"
-            className={"cal-btn" + (preWeekDisable ? " disable" : "")}
+            className={"cal-btn" + (pageIndex === 0 ? " disable" : "")}
             onClick={onClickPreWeek}
           />
         </div>
@@ -199,7 +185,12 @@ function App() {
         <div className="calendar-btn-right">
           <Button
             text="次週"
-            className={"cal-btn" + (nextWeekDisable ? " disable" : "")}
+            className={
+              "cal-btn" +
+              (pageIndex + 1 === Math.floor(calendar.length / displayCount)
+                ? " disable"
+                : "")
+            }
             onClick={onClickNextWeek}
           />
         </div>
@@ -221,40 +212,21 @@ function App() {
                   ご利用日<span className="required">必須</span>
                 </th>
                 <td>
-                  <div className="useDate">
+                  <div className="use-date">
                     <label>日付</label>
-                    <input
-                      id="date"
-                      readOnly
-                      className="input-date"
-                      {...register("date", {
-                        required: {
-                          value: true,
-                          message: "ご利用日をカレンダーから選択してください。",
-                        },
-                      })}
-                    />
-                    {errors.date && <ErrorMessage error={errors.date} />}
+                    <div className="selected-date">
+                      {selectedDateTime.date !== undefined &&
+                        selectedDateTime.date.toLocaleDateString()}
+                    </div>
                   </div>
-                  <div className="startTime">
+                  <div className="start-time">
                     <label>開始時刻</label>
-                    <input
-                      id="startTime"
-                      readOnly
-                      className="input-start-time"
-                      {...register("startTime", {
-                        required: {
-                          value: true,
-                          message:
-                            "ご利用開始時刻をカレンダーから選択してください。",
-                        },
-                      })}
-                    />
-                    {errors.startTime && (
-                      <ErrorMessage error={errors.startTime} />
-                    )}
+                    <div className="selected-time">
+                      {selectedDateTime.time !== undefined &&
+                        selectedDateTime.time}
+                    </div>
                   </div>
-                  <div className="useTime">
+                  <div className="use-time">
                     <label>利用時間</label>
                     <TimeSelector
                       key="timeSelector"
@@ -337,7 +309,8 @@ function App() {
           setConfirmModalIsOpen={setConfirmModalIsOpen}
           setCompleteModalIsOpen={setCompleteModalIsOpen}
           inputData={inputData}
-          selectedTimeIndex={selectedTimeIndex}
+          selectedDateTime={selectedDateTime}
+          selectedTimeIndex={selectedDateTime.timeIndex}
         />
       </ReactModal>
       <ReactModal isOpen={completeModalIsOpen} style={customStyles}>
