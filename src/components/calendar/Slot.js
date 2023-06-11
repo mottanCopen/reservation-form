@@ -21,11 +21,12 @@ export const Slot = (props) => {
   const slotDate = new Date(day);
   // 選択されたスロット
   const selected =
-    (selectedDateTime.dayIndex === dayIndex &&
+    selectedUseTime !== -1 &&
+    ((selectedDateTime.dayIndex === dayIndex &&
       selectedDateTime.timeIndex === timeIndex) ||
-    (selectedDateTime.dayIndex === dayIndex &&
-      timeIndex < selectedDateTime.timeIndex + selectedUseTime &&
-      timeIndex > selectedDateTime.timeIndex)
+      (selectedDateTime.dayIndex === dayIndex &&
+        timeIndex < selectedDateTime.timeIndex + selectedUseTime &&
+        timeIndex > selectedDateTime.timeIndex))
       ? "-selected"
       : "";
   return (

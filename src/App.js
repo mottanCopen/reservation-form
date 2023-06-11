@@ -74,6 +74,10 @@ function App() {
   const [selectedDateTime, setSeletedDateTime] = useState({});
   // 選択された利用時間
   const [selectedUseTime, setSeletedUseTime] = useState(0);
+  // 選択された利用時間のインデックスを保持
+  const [beforeSelectedUseTime, setBeforeSelectedUseTime] = useState(0);
+  // 選択されたページインデックス
+  const [selectedPageIdnex, setSelectedPageIndex] = useState(0);
 
   // Modalの設定
   ReactModal.setAppElement("#root");
@@ -107,6 +111,9 @@ function App() {
   // 表示リストを生成
   useEffect(() => {
     const viewList = [];
+    pageIndex === selectedPageIdnex
+      ? setSeletedUseTime(beforeSelectedUseTime)
+      : setSeletedUseTime(-1);
     for (
       let i = pageIndex * displayCount;
       i < pageIndex * displayCount + displayCount;
@@ -163,11 +170,16 @@ function App() {
   };
 
   const onChageUseTime = (event) => {
-    setSeletedUseTime(Number(event.target.value));
+    pageIndex === selectedPageIdnex
+      ? setSeletedUseTime(Number(event.target.value))
+      : setSeletedUseTime(-1);
+    setBeforeSelectedUseTime(Number(event.target.value));
   };
 
   useEffect(() => {
     setSeletedUseTime(0);
+    setBeforeSelectedUseTime(0);
+    setSelectedPageIndex(pageIndex);
     setValue("useTime", "0", {
       shouldValidate: false,
       shouldDirty: true,
