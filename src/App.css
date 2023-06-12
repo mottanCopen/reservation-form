@@ -98,8 +98,8 @@ td.slot-open {
 }
 
 td.slot-open-selected {
-  color: #4966a7;
-  background-color: #e6f387;
+  color: #fff;
+  background-color: #7ca6ff;
 }
 
 td.slot-open:hover {
