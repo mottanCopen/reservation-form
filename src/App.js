@@ -234,11 +234,10 @@ function App() {
         <div className="calender-center-title">
           <CalendarMonth viewCalendar={viewCalendar} />
           <div className="calendar-guidance">
-            {selectedDateTime.date === undefined &&
-              "利用開始時間を選択してください"}
+            {selectedDateTime.date === undefined && "▼▼利用開始時間を選択▼▼"}
             {selectedDateTime.date !== undefined &&
               selectedUseTime === 0 &&
-              "終了時間を選択してください"}
+              "▼▼終了時間を選択▼▼"}
           </div>
         </div>
         <div className="calendar-btn-right">

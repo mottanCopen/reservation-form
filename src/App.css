@@ -10,7 +10,7 @@
   justify-content: space-between;
   align-items: center;
   height: 80px;
-  margin: 10px;
+  margin: 10px 10px 0 10px;
 }
 
 button {
@@ -76,8 +76,9 @@ button:focus {
 
 .calendar-guidance {
   height: 20px;
-  margin-bottom: 10px;
+  font-size: 0.875em;
   font-weight: bold;
+  color: #7ca6ff;
 }
 
 /* 行ごとの設定 */
