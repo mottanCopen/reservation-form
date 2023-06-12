@@ -19,7 +19,8 @@ export const Slot = (props) => {
   const classNameArray = ["slot-open", "slot-closed"];
   // 日付を取得
   const slotDate = new Date(day);
-  // 選択されたスロット
+
+  // 選択されたスロットのスタイルを変える
   const selected =
     selectedUseTime !== -1 &&
     ((selectedDateTime.dayIndex === dayIndex &&
@@ -29,14 +30,24 @@ export const Slot = (props) => {
         timeIndex > selectedDateTime.timeIndex))
       ? "-selected"
       : "";
-  // 予約可能日か判定
+  // スロットの該当日付を整形(00:00:00にする)
+  const slotDateForCompare = new Date(
+    slotDate.getFullYear(),
+    slotDate.getMonth(),
+    slotDate.getDate()
+  );
   const today = new Date();
+  // 今日の日付から最短予約可能日を算出
+  const earliestAvailableDate = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
   // 最短予約受付可能日(0:当日、1:前日、2:2日前...)
-  today.setDate(today.getDate() + 2);
-  const isReservableDate =
-    slotDate.getFullYear() >= today.getFullYear() &&
-    slotDate.getMonth() >= today.getMonth() &&
-    slotDate.getDate() >= today.getDate();
+  earliestAvailableDate.setDate(earliestAvailableDate.getDate() + 2);
+  // 予約可能日か判定
+  const isReservableDate = slotDateForCompare >= earliestAvailableDate;
+
   return (
     <td
       className={
