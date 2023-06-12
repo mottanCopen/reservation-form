@@ -74,11 +74,12 @@ function App() {
   const [selectedDateTime, setSeletedDateTime] = useState({});
   // 選択された利用時間
   const [selectedUseTime, setSeletedUseTime] = useState(0);
-  // 選択された利用時間のインデックスを保持
+  // 選択された利用時間のインデックスを一時退避
   const [beforeSelectedUseTime, setBeforeSelectedUseTime] = useState(0);
   // 選択されたページインデックス
   const [selectedPageIdnex, setSelectedPageIndex] = useState(0);
-
+  // カレンダーの押下時の処理の切り替え
+  const [selectSwitch, setSelectSwitch] = useState(false);
   // Modalの設定
   ReactModal.setAppElement("#root");
 
@@ -137,6 +138,26 @@ function App() {
 
   // 時間枠をクリックした時の動作
   const onClickSlot = (date, time, dayIndex, timeIndex) => {
+    // 開始時間が選択されているかつ利用時間が未選択の場合は、終了時間を選択する
+    if (
+      selectedDateTime.date !== undefined &&
+      selectedDateTime.dayIndex === dayIndex &&
+      selectedUseTime === 0 &&
+      selectSwitch
+    ) {
+      const timePeriod = timeIndex - selectedDateTime.timeIndex;
+      if (timePeriod >= 0) {
+        setValue("useTime", String(timePeriod + 1), {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+        setSeletedUseTime(timePeriod + 1);
+        setBeforeSelectedUseTime(timePeriod + 1);
+        setSelectSwitch(false);
+        return;
+      }
+    }
+    setSelectSwitch(true);
     setValue("date", date.toLocaleDateString(), {
       shouldValidate: true,
       shouldDirty: true,
@@ -145,6 +166,8 @@ function App() {
       shouldValidate: true,
       shouldDirty: true,
     });
+    //　利用時間をリセットする(前の選択範囲のスタイルが一瞬当たるためリセット)
+    setSeletedUseTime(-1);
     setSeletedDateTime({ date, time, dayIndex, timeIndex });
     const timeTable = [...viewCalendar[dayIndex].timeSlots];
     // 予約可能最大時間数を取得
@@ -176,9 +199,12 @@ function App() {
     setBeforeSelectedUseTime(Number(event.target.value));
   };
 
+  // 選択された日付が変更された時の処理
   useEffect(() => {
+    // 利用時間をリセット
     setSeletedUseTime(0);
     setBeforeSelectedUseTime(0);
+    // 最後に選択されたページインデックスを格納
     setSelectedPageIndex(pageIndex);
     setValue("useTime", "0", {
       shouldValidate: false,
@@ -207,6 +233,13 @@ function App() {
         </div>
         <div className="calender-center-title">
           <CalendarMonth viewCalendar={viewCalendar} />
+          <div className="calendar-guidance">
+            {selectedDateTime.date === undefined &&
+              "利用開始時間を選択してください"}
+            {selectedDateTime.date !== undefined &&
+              selectedUseTime === 0 &&
+              "終了時間を選択してください"}
+          </div>
         </div>
         <div className="calendar-btn-right">
           <Button

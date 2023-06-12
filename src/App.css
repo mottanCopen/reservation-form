@@ -45,6 +45,10 @@ button:focus {
   margin: auto;
 }
 
+.calender-center-title h2 {
+  margin-block-end: 0;
+}
+
 .calendar-table-area table {
   table-layout: fixed;
   width: 100%;
@@ -68,6 +72,12 @@ button:focus {
 
 .calendar-table-body table td {
   border-left: 1px solid #717171;
+}
+
+.calendar-guidance {
+  height: 20px;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
 
 /* 行ごとの設定 */
@@ -102,12 +112,18 @@ td.slot-open-selected {
   background-color: #7ca6ff;
 }
 
-td.slot-open:hover {
-  background-color: #feffce;
-  cursor: pointer;
+@media (hover: hover) {
+  td.slot-open:hover {
+    background-color: #feffce;
+    cursor: pointer;
+  }
 }
 
 td.slot-closed {
+  background-color: #e7e7e7e9;
+}
+
+td.slot-outside {
   background-color: #e7e7e7e9;
 }
 

@@ -29,15 +29,26 @@ export const Slot = (props) => {
         timeIndex > selectedDateTime.timeIndex))
       ? "-selected"
       : "";
+  // 予約可能日か判定
+  const today = new Date();
+  // 最短予約受付可能日(0:当日、1:前日、2:2日前...)
+  today.setDate(today.getDate() + 2);
+  const isReservableDate =
+    slotDate.getFullYear() >= today.getFullYear() &&
+    slotDate.getMonth() >= today.getMonth() &&
+    slotDate.getDate() >= today.getDate();
   return (
     <td
-      className={classNameArray[status] + selected}
+      className={
+        isReservableDate ? classNameArray[status] + selected : "slot-outside"
+      }
       onClick={() =>
         availableArray[status] &&
+        isReservableDate &&
         onClickSlot(slotDate, time, dayIndex, timeIndex)
       }
     >
-      {statusArray[status]}
+      {isReservableDate ? statusArray[status] : "-"}
     </td>
   );
 };
