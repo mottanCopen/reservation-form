@@ -146,7 +146,7 @@ function App() {
       selectSwitch
     ) {
       const timePeriod = timeIndex - selectedDateTime.timeIndex;
-      if (timePeriod >= 0) {
+      if (timePeriod >= 0 && timePeriod <= selectableTime.length - 1) {
         setValue("useTime", String(timePeriod + 1), {
           shouldValidate: true,
           shouldDirty: true,
