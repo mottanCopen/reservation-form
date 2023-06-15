@@ -6,6 +6,7 @@ export const ConfirmModal = (props) => {
     setConfirmModalIsOpen,
     setCompleteModalIsOpen,
     inputData,
+    selectedPageIndex,
     selectedDateTime,
   } = props;
 
@@ -13,21 +14,39 @@ export const ConfirmModal = (props) => {
     setConfirmModalIsOpen(false);
   };
 
-  const submit = (input, selectedData) => {
-    console.log(createRequest(input, selectedData));
+  const submit = (input, selectedData, pageIndex) => {
+    const request = createRequest(input, selectedData, pageIndex);
+    postReserve(request);
     setConfirmModalIsOpen(false);
     setCompleteModalIsOpen(true);
+  };
+
+  // 予約情報を送信
+  const postReserve = (postData) => {
+    fetch(
+      "https://script.google.com/macros/s/AKfycbz9cFTqJbYladMzWd_hgh7SgNsctdp44jXW1s85rkvf1S6-oSA2_vNYvzAVmprFoS8XCg/exec",
+      {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(postData),
+      }
+    );
   };
 
   /*
    ** ▼▼▼▼▼▼▼▼▼リクエストフォーマット生成▼▼▼▼▼▼▼▼▼
    */
-  const createRequest = (inputData, selectedDateTime) => {
+  const createRequest = (inputData, selectedDateTime, pageIndex) => {
     const { useTime, name, Email, number } = inputData;
-    const { date, timeIndex } = selectedDateTime;
+    const { date, dayIndex, timeIndex } = selectedDateTime;
     const reqUseTime = Number(useTime);
+    const dateIndex = pageIndex * 7 + dayIndex;
     return {
       date: date,
+      dateIndex,
       timeIndex: timeIndex,
       useTime: reqUseTime,
       name,
@@ -125,7 +144,7 @@ export const ConfirmModal = (props) => {
         <Button
           text="予約を確定する"
           className="cal-btn"
-          onClick={() => submit(inputData, selectedDateTime)}
+          onClick={() => submit(inputData, selectedDateTime, selectedPageIndex)}
         />
       </div>
       <div className="confirm-modal-back-button">

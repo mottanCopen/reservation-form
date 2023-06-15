@@ -169,6 +169,7 @@ function App() {
     //　利用時間をリセットする(前の選択範囲のスタイルが一瞬当たるためリセット)
     setSeletedUseTime(-1);
     setSeletedDateTime({ date, time, dayIndex, timeIndex });
+    setSelectedPageIndex(pageIndex);
     const timeTable = [...viewCalendar[dayIndex].timeSlots];
     // 予約可能最大時間数を取得
     let availableCnt = timeIndex;
@@ -371,7 +372,7 @@ function App() {
           setCompleteModalIsOpen={setCompleteModalIsOpen}
           inputData={inputData}
           selectedDateTime={selectedDateTime}
-          selectedTimeIndex={selectedDateTime.timeIndex}
+          selectedPageIndex={selectedPageIdnex}
         />
       </ReactModal>
       <ReactModal isOpen={completeModalIsOpen} style={customStyles}>
